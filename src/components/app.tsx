@@ -15,8 +15,10 @@ import Header from "./header";
 import { ConfigProvider, getConfig } from "./config-provider";
 import { hexToRgb } from "../utils";
 import { Layout } from "./layout";
+import { MedusaProvider } from "medusa-react";
+import { QueryClient } from "@tanstack/react-query";
 const FinishOrder = React.lazy(() => import("../pages/finish-order"));
-
+const queryClient = new QueryClient();
 const MyApp = () => {
   return (
     <RecoilRoot>
@@ -28,23 +30,28 @@ const MyApp = () => {
           ),
         }}
       >
-        <App>
-          <Suspense
-            fallback={
-              <div className=" w-screen h-screen flex justify-center items-center">
-                <Spinner />
-              </div>
-            }
-          >
-            <SnackbarProvider>
-              <ZMPRouter>
-                <Header />
-                <Layout />
-                <ProductPicker />
-              </ZMPRouter>
-            </SnackbarProvider>
-          </Suspense>
-        </App>
+        <MedusaProvider
+          queryClientProviderProps={{ client: queryClient }}
+          baseUrl="http://192.168.1.9:9000"
+        >
+          <App>
+            <Suspense
+              fallback={
+                <div className=" w-screen h-screen flex justify-center items-center">
+                  <Spinner />
+                </div>
+              }
+            >
+              <SnackbarProvider>
+                <ZMPRouter>
+                  <Header />
+                  <Layout />
+                  {/* <ProductPicker /> */}
+                </ZMPRouter>
+              </SnackbarProvider>
+            </Suspense>
+          </App>
+        </MedusaProvider>
       </ConfigProvider>
     </RecoilRoot>
   );

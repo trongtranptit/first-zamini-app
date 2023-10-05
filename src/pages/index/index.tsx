@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useCallback, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { Input, Page } from "zmp-ui";
+import { Icon, Input, Page } from "zmp-ui";
 import ButtonFixed from "../../components/button-fixed/button-fixed";
 import ButtonPriceFixed from "../../components/button-fixed/button-price-fixed";
 import CategoriesStore from "../../components/categories-store";
@@ -22,103 +22,69 @@ import { useNavigate } from "react-router-dom";
 import useSetHeader from "../../hooks/useSetHeader";
 import { changeStatusBarColor } from "../../services";
 import { getConfig } from "../../components/config-provider";
+import { CoinIcon } from "../../components/icons/coin";
+import { NotificationIcon } from "../../components/icons/notification";
+import { CartHeaderIcon } from "../../components/icons/cartHeader";
+import { UserInfo } from "./user-info";
+import { HomeMenu } from "./home-menu";
+import { HomeSlide } from "./slide";
+import { ProductList } from "./product-list";
 // new
 const HomePage: React.FunctionComponent = () => {
-  const store = useRecoilValue(storeState);
-  const cart = useRecoilValue(cartState);
-  const totalPrice = useRecoilValue(cartTotalPriceState);
-
-  const [activeCate, setActiveCate] = useRecoilState<number>(activeCateState);
-  const [activeFilter, setActiveFilter] =
-    useRecoilState<string>(activeFilterState);
-  const storeProductResult = useRecoilValue<Product[]>(storeProductResultState);
-  const setSearchProduct = useSetRecoilState(searchProductState);
-  const navigate = useNavigate();
   const setHeader = useSetHeader();
+  const [timeCountdown, setTimeCountDown] = useState(15 * 60);
 
-  const handleInputSearch = useCallback((text: string) => {
-    setSearchProduct(text);
-  }, []);
-
-  const searchBar = useMemo(
+  const homeHeader = useMemo(
     () => (
-      <Input.Search
-        placeholder="Tìm kiếm sản phẩm"
-        onSearch={handleInputSearch}
-        className="cus-input-search"
-      />
+      <div className="px-5 flex items-center justify-between" id="home-header">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
+            <span className="home-header-text !w-[30px]">
+              {Math.floor(timeCountdown / 60)}
+            </span>
+            <span className="text-white">: </span>
+            <span className="home-header-text !w-[30px]">
+              {timeCountdown % 60}
+            </span>
+          </div>
+          <div className="flex gap-1 home-header-text items-center">
+            +10,000
+            <CoinIcon />
+          </div>
+        </div>
+        <div className="flex items-center gap-3 pr-[100px]">
+          <div className="flex items-center gap-1">
+            <NotificationIcon />
+            <CartHeaderIcon />
+          </div>
+        </div>
+      </div>
     ),
     []
   );
 
   useEffect(() => {
     setHeader({
-      customTitle: getConfig((c) => c.template.searchBar) ? searchBar : "",
+      customTitle: getConfig((c) => c.template.searchBar) ? homeHeader : "",
       hasLeftIcon: false,
       type: "secondary",
     });
     changeStatusBarColor("secondary");
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeCountDown(timeCountdown - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Page>
-      {store && storeProductResult && (
-        <div className="overflow-auto">
-          <div className="bg-primary">
-            <CardShop storeInfo={store} />
-            <CategoriesStore
-              categories={store.categories!}
-              activeCate={activeCate}
-              setActiveCate={(index) => setActiveCate(index)}
-              activeFilter={activeFilter}
-              setActiveFilter={setActiveFilter}
-              filter={filter}
-              quantity={storeProductResult.length}
-            />
-          </div>
-          <div className="bg-gray-100 h-3" />
-          <div
-            className="bg-white p-3"
-            style={{ marginBottom: totalPrice > 0 ? "120px" : "0px" }}
-          >
-            {storeProductResult.map((product) => (
-              <div className=" mb-2 w-full" key={product.id}>
-                <CardProductHorizontal
-                  pathImg={product.imgProduct}
-                  nameProduct={product.nameProduct}
-                  salePrice={product.salePrice}
-                  retailPrice={product.retailPrice}
-                  productId={product.id}
-                />
-              </div>
-            ))}
-          </div>
-          {totalPrice > 0 && (
-            <>
-              <ButtonPriceFixed
-                quantity={cart.listOrder.length}
-                totalPrice={totalPrice}
-                handleOnClick={() => {
-                  navigate("/finish-order");
-                }}
-              />
-              <ButtonFixed
-                listBtn={[
-                  {
-                    id: 1,
-                    content: "Hoàn tất đơn hàng",
-                    type: "primary",
-                    onClick: () => {
-                      navigate("/finish-order");
-                    },
-                  },
-                ]}
-                zIndex={99}
-              />
-            </>
-          )}
-        </div>
-      )}
+      <UserInfo />
+      <HomeMenu />
+      <HomeSlide />
+      <ProductList />
     </Page>
   );
 };

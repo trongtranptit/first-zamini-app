@@ -1,5 +1,9 @@
+import { PriceList } from "@medusajs/medusa";
+import { useQuery } from "@tanstack/react-query";
+import { useAdminVariants, useProduct, useProducts } from "medusa-react";
+import { useEffect, useState } from "react";
 import { StoreTypeRef } from "../constants/referrence";
-import { Product, Store } from "../models";
+import { DemoStore, Product, Store } from "../models";
 import { getRandomInt } from "../utils";
 import {
   listAddress,
@@ -56,4 +60,18 @@ export const createDummyStore = (): Store => {
     categories: listCategories,
   };
   return dummyStore;
+};
+
+export const getStoreInfo = (): DemoStore => {
+  const processGetProducts = useProducts();
+  // const processGetProductVariants = useQuery({queryKey: ['variants']});
+  useEffect(() => {
+    console.log(processGetProducts?.products);
+  }, [processGetProducts]);
+  return processGetProducts.isLoading
+    ? { listProducts: [], listProductVariants: [] }
+    : {
+        listProducts: processGetProducts.products || [],
+        listProductVariants: [],
+      };
 };

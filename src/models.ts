@@ -1,3 +1,5 @@
+import { ProductVariant } from "@medusajs/medusa";
+import { PricedProduct } from "@medusajs/medusa/dist/types/pricing";
 import { ReactNode } from "react";
 
 export type OrderStatus = "pending" | "shipping" | "finish";
@@ -104,3 +106,42 @@ export interface MenuItem {
   icon: ReactNode;
   activeIcon?: ReactNode;
 }
+
+export type HomeMenuItemProps = {
+  link: string;
+  label: string;
+  icon: ReactNode;
+};
+
+export type DemoProduct = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  handle: string | null;
+  is_giftcard: boolean;
+  status: string;
+  thumbnail: string | null;
+  profile_id: string;
+  weight: number | null;
+  length: number | null;
+  height: number | null;
+  width: number | null;
+  hs_code: string | null;
+  origin_country: string;
+  mid_code: string | null;
+  material: string | null;
+  collection_id: string | null;
+  type_id: string | null;
+  discountable: boolean;
+  external_id: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  metadata: object | null;
+};
+
+export type DemoStore = {
+  listProducts: PricedProduct[];
+  listProductVariants: ProductVariant[];
+};

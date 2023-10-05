@@ -32,8 +32,8 @@ const Header = () => {
         textColor
       )}
     >
-      <div className=" flex items-center h-[44px] pl-5 pr-[105px] gap-3 w-full justify-between">
-        <div className="flex flex-row items-center">
+      <div className=" flex items-center h-[44px] gap-3 w-full justify-between">
+        <div className="flex flex-row items-center h-full w-full">
           {hasLeftIcon && (
             <span onClick={() => (route ? navigate(route) : navigate(-1))}>
               <Icon icon="zi-arrow-left" className={iconColor} />
