@@ -12,16 +12,16 @@ export const OrganizationIcon: FC<{}> = () => {
       height="50"
       fill="#000000"
       stroke="#000000"
-      stroke-width="0.0051196"
+      strokeWidth="0.0051196"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0" />
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         stroke="#CCCCCC"
-        stroke-width="1.02392"
+        strokeWidth="1.02392"
       />
 
       <g id="SVGRepo_iconCarrier">

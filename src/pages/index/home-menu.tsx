@@ -30,8 +30,13 @@ const menus: HomeMenuItemProps[] = [
 export const HomeMenu: React.FunctionComponent = () => {
   return (
     <div className="flex justify-between">
-      {menus.map((menu) => (
-        <HomeMenuItem link={menu.link} icon={menu.icon} label={menu.label} />
+      {menus.map((menu, i) => (
+        <HomeMenuItem
+          key={i}
+          link={menu.link}
+          icon={menu.icon}
+          label={menu.label}
+        />
       ))}
     </div>
   );

@@ -60,24 +60,26 @@ const HomePage: React.FunctionComponent = () => {
         </div>
       </div>
     ),
-    []
+    [timeCountdown]
   );
-
+  console.log(getConfig((c) => c.template.searchBar));
   useEffect(() => {
     setHeader({
-      customTitle: getConfig((c) => c.template.searchBar) ? homeHeader : "",
+      customTitle: homeHeader,
       hasLeftIcon: false,
       type: "secondary",
     });
     changeStatusBarColor("secondary");
-  }, []);
+  }, [timeCountdown]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeCountDown(timeCountdown - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    if (timeCountdown > 0) {
+      const interval = setInterval(() => {
+        setTimeCountDown(timeCountdown - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timeCountdown]);
 
   return (
     <Page>

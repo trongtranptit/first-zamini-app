@@ -14,7 +14,7 @@ const tabs: Record<string, MenuItem> = {
     icon: <HomeIcon />,
     activeIcon: <HomeIcon active />,
   },
-  "/notification": {
+  "/product": {
     label: "Sản phẩm",
     icon: <ProductIcon />,
     activeIcon: <ProductIcon active />,
