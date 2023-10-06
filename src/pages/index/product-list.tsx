@@ -6,18 +6,22 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import CardProductVertical from "../../components/custom-card/card-product-vertical";
 import { storeProductResultState } from "../../state";
+type ProcessGetProductListProps = {
+  products: PricedProduct[];
+  isLoading: boolean;
+};
 export const ProductList: FunctionComponent<{ keyword?: string }> = (
   keyword
 ) => {
   const initVal: PricedProduct[] = [];
+  const [tempProcess, setTempProcess] = useState({
+    products: initVal,
+    isLoading: false,
+  });
   useEffect(() => {
     const processGetProductList = useProducts();
+    setTempProcess({});
     console.log("use effect: ", processGetProductList);
-    useEffect(() => {
-      setListProducts(processGetProductList.products || []);
-      console.log("nested useeffect: ", processGetProductList.products);
-      console.log("listProducts: ", listProducts);
-    }, [processGetProductList.isLoading]);
   }, [keyword]);
   const [listProducts, setListProducts] = useState(initVal);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +31,11 @@ export const ProductList: FunctionComponent<{ keyword?: string }> = (
     queryFn: () => Promise.resolve(5),
   });
   // const listProducts: PricedProduct[] = [];
-
+  useEffect(() => {
+    setListProducts(processGetProductList.products || []);
+    console.log("nested useeffect: ", processGetProductList.products);
+    console.log("listProducts: ", listProducts);
+  }, [processGetProductList.isLoading]);
   // useEffect(() => {
   //   console.log("listVariants: ", processGetAdminVariants.variants);
   // }, [processGetAdminVariants.isLoading]);
