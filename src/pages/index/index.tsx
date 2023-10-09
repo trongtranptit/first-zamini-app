@@ -29,6 +29,7 @@ import { UserInfo } from "./user-info";
 import { HomeMenu } from "./home-menu";
 import { HomeSlide } from "./slide";
 import { ProductList } from "./product-list";
+import Medusa from "@medusajs/medusa-js";
 // new
 const HomePage: React.FunctionComponent = () => {
   const setHeader = useSetHeader();
@@ -62,7 +63,6 @@ const HomePage: React.FunctionComponent = () => {
     ),
     [timeCountdown]
   );
-  console.log(getConfig((c) => c.template.searchBar));
   useEffect(() => {
     setHeader({
       customTitle: homeHeader,
@@ -81,6 +81,28 @@ const HomePage: React.FunctionComponent = () => {
     }
   }, [timeCountdown]);
 
+  const getProductList = (keyword: string | undefined) => {
+    const medusa = new Medusa({
+      baseUrl: "http://localhost:9000",
+      maxRetries: 3,
+    });
+    const key: string = keyword ? keyword : "";
+    if (key) {
+      medusa.products
+        .search({
+          q: key,
+        })
+        .then(({ hits }) => {
+          console.log(hits.length);
+          // setProducts(hits)
+        });
+    } else {
+      medusa.products.list().then(({ products, limit, offset, count }) => {
+        console.log(products.length);
+        setProducts(products);
+      });
+    }
+  };
   return (
     <Page>
       <UserInfo />
